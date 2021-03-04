@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: feign
+
+server:  port: 3001
+  
+eureka:  client:    service-url:      defaultZone: http://eureka1:2001/eureka, http://eureka2:2002/eureka
+
+ribbon:  # 通用配置, 对所有后台服务都有效
+  MaxAutoRetries: 1
+
+item-servcie:  # 只针对商品服务的配置
+  ribbon: 
+    MaxAutoRetriesNextServer: 2
+    
+feign:  hystrix:    enabled: true
+    
+management:  endpoints:    web:      exposure:        include:        - hystrix.stream
+        - beans
+        - mappings
+    

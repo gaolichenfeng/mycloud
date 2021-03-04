@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: zuul
+
+server:
+  port: 3001
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://euraka1:2001/eureka,http://eureka2:2001/eureka
+
+zuul:
+  retryable: true  #启动重试
+  routes: #路由，可以不要，默认为eruake上注册的服务名，如果配置了，则配置的地址，也可以作为入口进行访问；
+          # 例如: http://localhost:3001/item-service/35?token=1234 和http://localhost:3001/item-service1/35?token=1234都可以进行访问
+    item-service: /item-service1/**
+    user-service: /user-service/**
+    order-service: /order-service/**
+
+ribbon:
+  ConnectTimeout: 1000
+  ReadTimeout: 1000
+  MaxAutoRetriesNextServer: 1
+  MaxAutoRetries: 1
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
